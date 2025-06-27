@@ -1,0 +1,13 @@
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "jojo@academia.com",
+    "password": "password123"
+}
+
+###
+
+GET http://localhost:3000/professor/685eb851368394503d37777d/availability
+Authorization: Bearer {{login.response.body.token}}

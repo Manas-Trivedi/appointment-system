@@ -95,6 +95,21 @@ app.post('/availability', auth, async (req, res) => {
     }
 })
 
+app.get('/professor/:professorId/availability', auth, async (req, res) => {
+    try {
+        const { professorId } = req.params
+
+        const availableSlots = await Availability.find({
+            professorId,
+            isBooked: false
+        })
+
+        res.json({ availableSlots })
+    } catch(err) {
+        return res.status(400).json({error: err.message})
+    }
+})
+
 app.listen(3000, () => {
     console.log('Server running on Port 3000');
 })
