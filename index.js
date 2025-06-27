@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express')
 const mongoose = require('mongoose')
+const auth = require('./middleware/auth')
 
 const app = express()
 app.use(express.json())
@@ -26,7 +27,7 @@ app.post('/auth/login', async (req, res) => {
         const user = await User.findOne({email});
         if(!user) {
             return res.status(400).json({error: "User does not exist"})
-        } else if(password !== user.password) {
+        } else if(!(await bcrypt.compare(password, user.password))) {
             return res.status(400).json({error: "Invalid Credentials"})
         }
 
@@ -65,6 +66,32 @@ app.post('/auth/signup', async (req, res) => {
         });
     } catch(error) {
         res.status(500).json({error: error.message})
+    }
+})
+
+const Availability = require('./models/Availability')
+
+app.post('/availability', auth, async (req, res) => {
+    try {
+        if(req.user.role != 'professor') {
+            return res.status(403).json({error: 'Only professors can set availability'})
+        }
+
+        const {date, startTime, endTime} = req.body;
+
+        const availability = new Availability({
+            professorId: req.user._id,
+            date: new Date(date),
+            startTime,
+            endTime
+        })
+
+        await availability.save()
+
+        res.status(201).json({message: "Availability set successfully", availability})
+
+    } catch(err) {
+        return res.status(400).json({error: err.message})
     }
 })
 

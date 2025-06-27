@@ -1,0 +1,20 @@
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "p1@college.com",
+    "password": "12345678"
+}
+
+###
+
+POST http://localhost:3000/availability
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "date": "2024-01-15",
+    "startTime": "09:00",
+    "endTime": "10:00"
+}
