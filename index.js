@@ -79,6 +79,22 @@ app.post('/availability', auth, async (req, res) => {
 
         const {date, startTime, endTime} = req.body;
 
+        const existingSlots = await Availability.find({
+            professorId: req.user._id,
+            date: new Date(date)
+        })
+
+        const hasOverlap = existingSlots.some(slot => {
+            const newStart = startTime;
+            const newEnd = endTime;
+
+            return (newStart < slot.endTime && newEnd > slot.startTime)
+        })
+
+        if (hasOverlap) {
+            return res.status(400).json({ error: 'Time slot overlaps with existing availability' });
+        }
+
         const availability = new Availability({
             professorId: req.user._id,
             date: new Date(date),
