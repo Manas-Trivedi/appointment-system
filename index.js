@@ -48,7 +48,12 @@ app.post('/auth/signup', async (req, res) => {
             return res.status(400).json({error: 'User already exists'})
         }
 
-        const user = new User({ name, email, password, role }) // have to hash pswd
+        const user = new User({
+            name,
+            email,
+            password: await bcrypt.hash(password, 10),
+            role
+        })
 
         await user.save();
         const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET);

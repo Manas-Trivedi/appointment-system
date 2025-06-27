@@ -2,8 +2,8 @@ POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-    "name": "Professor",
+    "name": "Professor X",
     "email": "p1@college.com",
-    "password": "password123",
+    "password": "12345678",
     "role": "professor"
 }
