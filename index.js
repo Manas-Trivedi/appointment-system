@@ -182,6 +182,27 @@ app.get('/appointments', auth, async (req, res) => {
     }
 })
 
+app.delete('/appointments/:appointmentId', auth, async (req, res) => {
+    try {
+        const appointment = await Appointment.findById(req.params.appointmentId)
+
+        if (req.user.role !== 'professor') {
+            return res.status(400).json({error: 'Only professors can cancel appointments'})
+        }
+
+        if (appointment.professorId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({error: 'Can only cancel your own appointments'});
+        }
+
+        await Availability.findByIdAndUpdate(appointment.availabilityId, {isBooked: false})
+        await Appointment.findByIdAndDelete(req.params.appointmentId)
+
+        res.status(201).json({ message: "Appointment cancelled successfully" });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+})
+
 app.listen(3000, () => {
     console.log('Server running on Port 3000');
 })

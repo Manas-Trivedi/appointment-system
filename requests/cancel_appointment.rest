@@ -1,0 +1,13 @@
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "p1@college.com",
+    "password": "12345678"
+}
+
+###
+
+DELETE http://localhost:3000/appointments/685efb894ff32b05c5daad71
+Authorization: Bearer {{login.response.body.token}}
