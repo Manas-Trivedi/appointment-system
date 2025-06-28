@@ -160,6 +160,28 @@ app.post('/appointment/:slotId', auth, async (req, res) => {
     }
 })
 
+app.get('/appointments', auth, async (req, res) => {
+    try {
+        let appointments;
+
+        if (req.user.role === 'student') {
+            appointments = await Appointment.find({ studentId: req.user._id })
+                .populate('professorId', 'name email')
+                .sort({ date: 1, startTime: 1 });
+        } else if (req.user.role === 'professor') {
+            appointments = await Appointment.find({ professorId: req.user._id })
+                .populate('studentId', 'name email')
+                .sort({ date: 1, startTime: 1 });
+        } else {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+
+        res.json({ appointments });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+})
+
 app.listen(3000, () => {
     console.log('Server running on Port 3000');
 })
