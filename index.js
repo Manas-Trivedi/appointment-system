@@ -69,7 +69,8 @@ app.post('/auth/signup', async (req, res) => {
     }
 })
 
-const Availability = require('./models/Availability')
+const Availability = require('./models/Availability');
+const Appointment = require('./models/Appointment');
 
 app.post('/availability', auth, async (req, res) => {
     try {
@@ -123,6 +124,39 @@ app.get('/professor/:professorId/availability', auth, async (req, res) => {
         res.json({ availableSlots })
     } catch(err) {
         return res.status(400).json({error: err.message})
+    }
+})
+
+app.post('/appointment/:slotId', auth, async (req, res) => {
+    try {
+        if(req.user.role !== 'student') {
+            return res.status(400).json({error: 'Only students can book assignments'})
+        }
+
+        if(!req.body.slotId || (await Availability.findById(req.body.slotId)).isBooked) {
+            return res.status(400).json({ error: "Slot unavailable" })
+        }
+
+        const {professorId, date, startTime, endTime} = await Availability.findById(req.body.slotId);
+
+        const appointment = new Appointment({
+            studentId: req.user._id,
+            professorId: professorId,
+            availabilityId: req.params.slotId,
+            date: date,
+            startTime: startTime,
+            endTime: endTime,
+            status: 'booked'
+        })
+
+        await appointment.save()
+        await Availability.findByIdAndUpdate(req.body.slotId, { isBooked: true });
+
+        res.status(201).json({message: "Appointment booked successfully", appointment})
+
+
+    } catch(err) {
+        return res.status(500).json({error: err.message})
     }
 })
 
