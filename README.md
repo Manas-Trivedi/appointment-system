@@ -65,7 +65,7 @@ Content-Type: application/json
   "name": "John Doe",
   "email": "john@example.com",
   "password": "password123",
-  "role": "student" // or "professor"
+  "role": "student"
 }
 ```
 
