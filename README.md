@@ -101,6 +101,12 @@ GET /appointments/professor
 Authorization: Bearer <jwt_token>
 ```
 
+#### Cancel Appointment
+```http
+DELETE /appointments/<appointment_id>
+Authorization: Bearer <jwt_token>
+```
+
 ### Student Endpoints
 
 #### Check Availability
@@ -124,12 +130,6 @@ Content-Type: application/json
 #### View My Appointments
 ```http
 GET /appointments/student
-Authorization: Bearer <jwt_token>
-```
-
-#### Cancel Appointment
-```http
-DELETE /appointments/<appointment_id>
 Authorization: Bearer <jwt_token>
 ```
 
@@ -178,12 +178,12 @@ Coverage reports are generated in the `coverage/` directory. See `TESTING.md` fo
 - View professor availability
 - Book appointments
 - View their appointments
-- Cancel appointments
 
 ### Professors
 - Create account and login
 - Set availability slots
 - View their appointments with students
+- Cancel appointments
 - Manage their schedule
 
 ## Security Features
