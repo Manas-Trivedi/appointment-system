@@ -153,13 +153,14 @@ npm run test:coverage
 ### Test Coverage
 
 The project maintains high test coverage across:
-- Authentication flows
-- Availability management
-- Appointment booking and cancellation
-- Authorization and access control
-- Integration testing
+- **Authentication Tests**: User registration, login, JWT token generation
+- **Availability Tests**: Professor availability creation, role-based access control
+- **Appointment Tests**: Student booking, cancellation, double-booking prevention
+- **Integration Tests**: Complete user journey from registration to appointment booking
 
-Coverage reports are generated in the `coverage/` directory.
+**Current Coverage**: 84% statement coverage, 85% branch coverage
+
+Coverage reports are generated in the `coverage/` directory. See `TESTING.md` for detailed testing documentation.
 
 ## Technologies Used
 
