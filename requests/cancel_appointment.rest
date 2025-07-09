@@ -9,5 +9,5 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/appointments/685efb894ff32b05c5daad71
+DELETE http://localhost:3000/appointments/686e982886946d482b803251
 Authorization: Bearer {{login.response.body.token}}
